@@ -12,7 +12,15 @@ app.post("/presence", async (req, res) => {
         }
 
         const query = userIds.join(",");
-        const response = await axios.get(`https://presence.roblox.com/v1/presence/users?userIds=${query}`);
+        const response = await axios.post(
+    "https://presence.roblox.com/v1/presence/users",
+    { userIds }, // JSON body
+    {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+);
 
         res.json(response.data);
     } catch (error) {
