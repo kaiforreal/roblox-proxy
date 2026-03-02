@@ -6,12 +6,13 @@ app.use(express.json());
 
 app.post("/presence", async (req, res) => {
     try {
-        const userIds = req.body.userIds;
+        const userIds = req.body.userIds; // array of numbers
+        if (!userIds || userIds.length === 0) {
+            return res.status(400).json({ error: "No userIds provided" });
+        }
 
-        const response = await axios.post(
-            "https://presence.roblox.com/v1/presence/users",
-            { userIds: userIds }
-        );
+        const query = userIds.join(",");
+        const response = await axios.get(`https://presence.roblox.com/v1/presence/users?userIds=${query}`);
 
         res.json(response.data);
     } catch (error) {
